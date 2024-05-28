@@ -231,7 +231,7 @@ cp /etc/net/ifaces/eth0/options /etc/net/ifaces/eth1/
 echo 10.0.3.100/24 > /etc/net/ifaces/eth0/ipv4address
 echo 2001:33::100/64 > /etc/net/ifaces/eth0/ipv6address
 echo default via 10.0.3.1 > /etc/net/ifaces/eth0/ipv4route
-echo default via 2001:33::1/64 > /etc/net/ifaces/eth0/ipv6route
+echo default via 2001:33::1 > /etc/net/ifaces/eth0/ipv6route
 echo 172.16.200.2/28 > /etc/net/ifaces/eth1/ipv4address
 echo 2000:200::2/124 > /etc/net/ifaces/eth1/ipv6address
 echo nameserver 192.168.100.1 > /etc/net/ifaces/eth1/resolv.conf
@@ -291,4 +291,59 @@ echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
 ```
+## HQ-SRV
+```sh
+hostnamectl set-hostname hq-srv.hq.work;exec bash
+```
+```sh
+useradd admin && echo P@ssw0rd | passwd admin --stdin
+```
+```sh
+sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+mkdir /etc/net/ifaces/eth0
+cat <<EOF > /etc/net/ifaces/eth0/options
+TYPE=eth
+BOOTPROTO=dhcp,static
+EOF
+echo 192.168.200.1/26 > /etc/net/ifaces/eth0/ipv4address
+echo 2000:100::1/122 > /etc/net/ifaces/eth0/ipv6address
+echo default via 192.168.200.2 > /etc/net/ifaces/eth0/ipv4route
+echo default via 2000:100::2 > /etc/net/ifaces/eth0/ipv6route
+systemctl restart network
+echo nameserver 192.168.100.1 > /etc/resolv.conf
+```
+## BR-SRV
+```sh
+hostnamectl set-hostname br-srv.branch.work;exec bash
+```
+```sh
+useradd network_admin && echo P@ssw0rd | passwd admin --stdin
+useradd branch_admin && echo P@ssw0rd | passwd admin --stdin
+```
+```sh
+sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+mkdir /etc/net/ifaces/eth0
+cat <<EOF > /etc/net/ifaces/eth0/options
+TYPE=eth
+BOOTPROTO=static
+EOF
+echo 172.16.200.1/28 > /etc/net/ifaces/eth0/ipv4address
+echo 2000:200::1/124 > /etc/net/ifaces/eth0/ipv6address
+echo default via 172.16.200.2 > /etc/net/ifaces/eth0/ipv4route
+echo default via 2000:200::2 > /etc/net/ifaces/eth0/ipv6route
+systemctl restart network
+echo nameserver 192.168.100.1 > /etc/resolv.conf
+```
+```sh
+apt-get install clamav clamav-db -y
+echo <<EOF > /root/infected.txt
+X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+EOF
+cat <<EOF > /etc/cron.d/clamav-scan
+# RUN system scanning at midnight
+0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log
+EOF
+```
+
+
 
