@@ -258,6 +258,7 @@ router ospf6
 exit
 EOF
 systemctl enable --now frr
+systemctl restart frr
 ```
 ```sh
 apt-get install chrony -y
@@ -282,7 +283,7 @@ subnet 192.168.200.0 netmask 255.255.255.192 {
   option routers 192.168.200.2;
 }
 host hq-srv {
-  hardware ethernet 00:50:00:00:03:00;
+  hardware ethernet aa:bb:cc:dd:ee:ff;
   fixed-address 192.168.200.1;
 }
 EOF
@@ -379,6 +380,7 @@ router ospf6
 exit
 EOF
 systemctl enable --now frr
+systemctl restart frr
 ```
 ```sh
 apt-get install chrony -y
@@ -404,6 +406,7 @@ echo 192.168.200.1/26 > /etc/net/ifaces/eth0/ipv4address
 echo 2000:100::1/122 > /etc/net/ifaces/eth0/ipv6address
 echo default via 192.168.200.2 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2000:100::2 > /etc/net/ifaces/eth0/ipv6route
+echo address aa:bb:cc:dd:ee:ff > /etc/net/ifaces/eth0/iplink 
 systemctl restart network
 echo nameserver 192.168.100.1 > /etc/resolv.conf
 ```
