@@ -1,8 +1,10 @@
 # Все команды, разбитые по устройствам
-[CLI](#CLI)
-[ISP](#ISP)
-[HQ-R](#HQ-R)
-[BR-R](#BR-R)
+- [CLI](#CLI)
+- [ISP](#ISP)
+- [HQ-R](#HQ-R)
+- [BR-R](#BR-R)
+- [HQ-SRV](#HQ-SRV)
+- [BR-SRV](#BR-SRV)
 
 ## CLI
 ```sh
@@ -79,10 +81,13 @@ useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
 mkdir /opt/backup
 mkdir /etc/scripts
 cat <<EOF > /etc/scripts/backup-script.sh
- #!/bin/bash
- backup_files="/home /etc"
- day=$(date +%A-%F)
- tar czf /opt/backup/"hq-r-$day.tgz" $backup_files
+#!/bin/bash
+backup_files="/home /etc"
+dest="/opt/backup"
+day=$(date +%A-%F)
+hostname=$(hostname -s)
+archive_file="$hostname-$day.tgz"
+tar czf $dest/$archive_file $backup_files
 EOF
 chmod +x /etc/scripts/backup-script.sh
 /etc/scripts/backup-script.sh
@@ -181,10 +186,13 @@ useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
 mkdir /opt/backup
 mkdir /etc/scripts
 cat <<EOF > /etc/scripts/backup-script.sh
- #!/bin/bash
- backup_files="/home /etc"
- day=$(date +%A-%F)
- tar czf /opt/backup/"br-r-$day.tgz" $backup_files
+#!/bin/bash
+backup_files="/home /etc"
+dest="/opt/backup"
+day=$(date +%A-%F)
+hostname=$(hostname -s)
+archive_file="$hostname-$day.tgz"
+tar czf $dest/$archive_file $backup_files
 EOF
 chmod +x /etc/scripts/backup-script.sh
 /etc/scripts/backup-script.sh
