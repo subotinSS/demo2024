@@ -1,4 +1,8 @@
 # Все команды, разбитые по устройствам
+[CLI](#CLI)
+[ISP](#ISP)
+[HQ-R](#HQ-R)
+
 ## CLI
 ```sh
 hostnamectl set-hostname cli;exec bash
@@ -55,7 +59,30 @@ echo 172.16.200.0/28 via 10.0.3.100 > /etc/net/ifaces/eth3/ipv4route
 echo 2000:200::/124 via 2001:33::100 > /etc/net/ifaces/eth3/ipv6route
 ```
 ```sh
+systemctl restart network
+```
+```sh
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 iptables-save >> /etc/sysconfig/iptables
 systemctl enable --now iptables
+```
+## HQ-R
+```sh
+hostnamectl set-hostname hq-r.hq.work;exec bash
+```
+```sh
+sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
+```
+```sh
+sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+mkdir /etc/net/ifaces/eth{0..2}
+cat <<EOF > /etc/net/ifaces/eth0/options
+TYPE=eth
+BOOTPROTO=static
+EOF
+cp /etc/net/ifaces/eth0/options /etc/net/ifaces/eth1/
+cp /etc/net/ifaces/eth0/options /etc/net/ifaces/eth2/
+```
+```sh
+
 ```
