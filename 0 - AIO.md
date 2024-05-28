@@ -63,6 +63,10 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 iptables-save >> /etc/sysconfig/iptables
 systemctl enable --now iptables
 ```
+```sh
+apt-get install iperf3 -y
+systemctl enable --now iperf3
+```
 ## HQ-R
 ```sh
 hostnamectl set-hostname hq-r.hq.work;exec bash
@@ -70,6 +74,18 @@ hostnamectl set-hostname hq-r.hq.work;exec bash
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
+```
+```sh
+mkdir /opt/backup
+mkdir /etc/scripts
+cat <<EOF > /etc/scripts/backup-script.sh
+ #!/bin/bash
+ backup_files="/home /etc"
+ day=$(date +%A-%F)
+ tar czf /opt/backup/"hq-r-$day.tgz" $backup_files
+EOF
+chmod +x /etc/scripts/backup-script.sh
+/etc/scripts/backup-script.sh
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
@@ -92,17 +108,26 @@ echo nameserver 192.168.100.1 > /etc/net/ifaces/eth1/resolv.conf
 systemctl restart network
 ```
 ```sh
+apt-get install iperf3 -y
+iperf3 -c 10.0.2.1 --get-server-output
+```
+<!---
+Wireguard keys
+PrivateKeyServer = EC8jPEudJhau5nBa6CB2OPQxH6GHqvRYNUw6M11kNV4=
+PublicKeyServer = 5ewEdGg2jcsE5Pht2O1X06RsvBwufxdev8SLgvJGKks=
+PrivateKeyClient = 0NoAhQRWFxULuptD5tiqyhZcZIdNi66IGxPOu25LWlw=
+PublicKeyClient = n50LXW13DNK8goptE84NyLJ2OIVlwVr2tVlezgtgAHw=
+-->
+```sh
 apt-get install wireguard-tools wireguard-tools-wg-quick -y
 mkdir /etc/wireguard
 cat <<EOF > /etc/wireguard/wg0.conf
 [Interface]
 PrivateKey = EC8jPEudJhau5nBa6CB2OPQxH6GHqvRYNUw6M11kNV4=
-#PublicKey = 5ewEdGg2jcsE5Pht2O1X06RsvBwufxdev8SLgvJGKks=
 Address = 10.0.0.1/24, 2001:100::1/64, fe80::200:ff:fe00:1/64
 ListenPort = 1234
 Table = off
 [Peer]
-#PrivateKey = 0NoAhQRWFxULuptD5tiqyhZcZIdNi66IGxPOu25LWlw=
 PublicKey = n50LXW13DNK8goptE84NyLJ2OIVlwVr2tVlezgtgAHw=
 AllowedIPs = 0.0.0.0/0, ::/0
 EOF
@@ -111,8 +136,8 @@ systemctl enable wg-quick@wg0
 ```
 ```sh
 apt-get install frr -y
-sed -i 's/ospfd=/ospfd=yes/g' /etc/frr/daemons
-sed -i 's/ospf6d=/ospf6d=yes/g' /etc/frr/daemons
+sed -i 's/ospfd=.*/ospfd=yes/g' /etc/frr/daemons
+sed -i 's/ospf6d=.*/ospf6d=yes/g' /etc/frr/daemons
 cat <<EOF > /etc/frr/frr.conf
 interface wg0
  ipv6 ospf6 area 0
@@ -134,6 +159,16 @@ exit
 EOF
 systemctl enable --now frr
 ```
+```sh
+apt-get install chrony -y
+cat <<EOF > /etc/chrony.conf
+server 127.0.0.1 iburst
+local stratum 5
+allow all
+EOF
+systemctl enable --now chronyd
+systemctl restart chronyd
+```
 ## BR-R
 ```sh
 hostnamectl set-hostname br-r.branch.work;exec bash
@@ -141,6 +176,18 @@ hostnamectl set-hostname br-r.branch.work;exec bash
 ```sh
 useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
+```
+```sh
+mkdir /opt/backup
+mkdir /etc/scripts
+cat <<EOF > /etc/scripts/backup-script.sh
+ #!/bin/bash
+ backup_files="/home /etc"
+ day=$(date +%A-%F)
+ tar czf /opt/backup/"br-r-$day.tgz" $backup_files
+EOF
+chmod +x /etc/scripts/backup-script.sh
+/etc/scripts/backup-script.sh
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
@@ -162,6 +209,13 @@ echo 2000:200::2/124 > /etc/net/ifaces/eth1/ipv6address
 echo nameserver 192.168.100.1 > /etc/net/ifaces/eth1/resolv.conf
 systemctl restart network
 ```
+<!---
+Wireguard keys
+PrivateKeyServer = EC8jPEudJhau5nBa6CB2OPQxH6GHqvRYNUw6M11kNV4=
+PublicKeyServer = 5ewEdGg2jcsE5Pht2O1X06RsvBwufxdev8SLgvJGKks=
+PrivateKeyClient = 0NoAhQRWFxULuptD5tiqyhZcZIdNi66IGxPOu25LWlw=
+PublicKeyClient = n50LXW13DNK8goptE84NyLJ2OIVlwVr2tVlezgtgAHw=
+-->
 ```sh
 apt-get install wireguard-tools wireguard-tools-wg-quick -y
 mkdir /etc/wireguard
@@ -180,8 +234,8 @@ systemctl enable wg-quick@wg0
 ```
 ```sh
 apt-get install frr -y
-sed -i 's/ospfd=/ospfd=yes/g' /etc/frr/daemons
-sed -i 's/ospf6d=/ospf6d=yes/g' /etc/frr/daemons
+sed -i 's/ospfd=.*/ospfd=yes/g' /etc/frr/daemons
+sed -i 's/ospf6d=.*/ospf6d=yes/g' /etc/frr/daemons
 cat <<EOF > /etc/frr/frr.conf
 interface wg0
  ipv6 ospf6 area 0
@@ -202,4 +256,10 @@ router ospf6
 exit
 EOF
 systemctl enable --now frr
+```
+```sh
+apt-get install chrony -y
+echo server 192.168.200.2 iburst > /etc/chrony.conf
+systemctl enable --now chronyd
+systemctl restart chronyd
 ```
