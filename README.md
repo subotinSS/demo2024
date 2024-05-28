@@ -407,6 +407,22 @@ echo default via 2000:100::2 > /etc/net/ifaces/eth0/ipv6route
 systemctl restart network
 echo nameserver 192.168.100.1 > /etc/resolv.conf
 ```
+```sh
+apt-get install chrony -y
+echo server 192.168.200.2 iburst > /etc/chrony.conf
+systemctl enable --now chronyd
+systemctl restart chronyd
+```
+```sh
+apt-get install clamav clamav-db -y
+cat <<EOF > /root/infected.txt
+X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+EOF
+cat <<EOF > /etc/cron.d/clamav-scan
+# RUN system scanning at midnight
+0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log
+EOF
+```
 ## BR-SRV
 ```sh
 hostnamectl set-hostname br-srv.branch.work;exec bash
@@ -430,8 +446,14 @@ systemctl restart network
 echo nameserver 192.168.100.1 > /etc/resolv.conf
 ```
 ```sh
+apt-get install chrony -y
+echo server 192.168.200.2 iburst > /etc/chrony.conf
+systemctl enable --now chronyd
+systemctl restart chronyd
+```
+```sh
 apt-get install clamav clamav-db -y
-echo <<EOF > /root/infected.txt
+cat <<EOF > /root/infected.txt
 X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
 EOF
 cat <<EOF > /etc/cron.d/clamav-scan
