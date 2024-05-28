@@ -426,6 +426,32 @@ cat <<EOF > /etc/cron.d/clamav-scan
 0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log
 EOF
 ```
+```sh
+apt-get install docker-engine docker-compose -y
+systemctl enable --now docker.service
+cat << EOF > /home/user/wiki.yaml
+version: '3'
+services:
+  wiki:
+    image: mediawiki
+    restart: always
+    ports:
+      - 8080:80
+    volumes:
+      - ./LocalSettings.php:/var/www/html/LocalSettings.php
+    links:
+      - db
+  db:
+    image: mysql
+    container_name: db
+    environment:
+      MYSQL_DATABASE: mediawiki
+      MYSQL_USER: wiki
+      MYSQL_PASSWORD: DEP@ssw0rd
+      MYSQL_ROOT_PASSWORD: toor
+EOF
+docker-compose -f /home/user/wiki.yaml up -d
+```
 ## BR-SRV
 ```sh
 hostnamectl set-hostname br-srv.branch.work;exec bash
