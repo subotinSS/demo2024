@@ -46,8 +46,6 @@ BOOTPROTO=static
 EOF
 cp /etc/net/ifaces/eth1/options /etc/net/ifaces/eth2/
 cp /etc/net/ifaces/eth1/options /etc/net/ifaces/eth3/
-```
-```sh
 echo 10.0.1.1/24 > /etc/net/ifaces/eth1/ipv4address
 echo 2001:11::1/64 > /etc/net/ifaces/eth1/ipv6address
 echo 10.0.2.1/24 > /etc/net/ifaces/eth2/ipv4address
@@ -58,8 +56,6 @@ echo 10.0.3.1/24 > /etc/net/ifaces/eth3/ipv4address
 echo 2001:33::1/64 > /etc/net/ifaces/eth3/ipv6address
 echo 172.16.200.0/28 via 10.0.3.100 > /etc/net/ifaces/eth3/ipv4route
 echo 2000:200::/124 via 2001:33::100 > /etc/net/ifaces/eth3/ipv6route
-```
-```sh
 systemctl restart network
 ```
 ```sh
@@ -86,8 +82,6 @@ TYPE=eth
 BOOTPROTO=static
 EOF
 cp /etc/net/ifaces/eth0/options /etc/net/ifaces/eth1/
-```
-```sh
 echo 10.0.2.100/24 > /etc/net/ifaces/eth0/ipv4address
 echo 2001:22::100/64 > /etc/net/ifaces/eth0/ipv6address
 echo default via 10.0.2.1 > /etc/net/ifaces/eth0/ipv4route
@@ -115,6 +109,31 @@ EOF
 systemctl restart wg-quick@wg0
 systemctl enable wg-quick@wg0
 ```
+```sh
+apt-get install frr -y
+sed -i 's/ospfd=/ospfd=yes/g' /etc/frr/daemons
+sed -i 's/ospf6d=/ospf6d=yes/g' /etc/frr/daemons
+cat <<EOF > /etc/frr/frr.conf
+interface wg0
+ ipv6 ospf6 area 0
+exit
+!
+interface eth1
+ ipv6 ospf6 area 0
+exit
+!
+router ospf
+ ospf router-id 1.1.1.1
+ network 10.0.0.0/24 area 0
+ network 192.168.200.0/26 area 0
+exit
+!
+router ospf6
+ ospf6 router-id 11.11.11.11
+exit
+EOF
+systemctl enable --now frr
+```
 ## BR-R
 ```sh
 hostnamectl set-hostname br-r.branch.work;exec bash
@@ -134,8 +153,6 @@ TYPE=eth
 BOOTPROTO=static
 EOF
 cp /etc/net/ifaces/eth0/options /etc/net/ifaces/eth1/
-```
-```sh
 echo 10.0.3.100/24 > /etc/net/ifaces/eth0/ipv4address
 echo 2001:33::100/64 > /etc/net/ifaces/eth0/ipv6address
 echo default via 10.0.3.1 > /etc/net/ifaces/eth0/ipv4route
@@ -160,4 +177,29 @@ PersistentKeepalive = 10
 EOF
 systemctl restart wg-quick@wg0
 systemctl enable wg-quick@wg0
+```
+```sh
+apt-get install frr -y
+sed -i 's/ospfd=/ospfd=yes/g' /etc/frr/daemons
+sed -i 's/ospf6d=/ospf6d=yes/g' /etc/frr/daemons
+cat <<EOF > /etc/frr/frr.conf
+interface wg0
+ ipv6 ospf6 area 0
+exit
+!
+interface eth1
+ ipv6 ospf6 area 0
+exit
+!
+router ospf
+ ospf router-id 2.2.2.2
+ network 10.0.0.0/24 area 0
+ network 172.16.200.0/28 area 0
+exit
+!
+router ospf6
+ ospf6 router-id 22.22.22.22
+exit
+EOF
+systemctl enable --now frr
 ```
