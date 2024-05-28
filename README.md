@@ -1,10 +1,106 @@
 # Все команды, разбитые по устройствам
+- [Таблица IP адресов](#Таблица IP адресов)
 - [CLI](#CLI)
 - [ISP](#ISP)
 - [HQ-R](#HQ-R)
 - [BR-R](#BR-R)
 - [HQ-SRV](#HQ-SRV)
 - [BR-SRV](#BR-SRV)
+
+# Таблица IP адресов
+<table>
+  <tr>
+    <td>Имя устройства</td>
+    <td>Интерфейс</td>
+    <td>IPv4</td>
+    <td>IPv6</td>
+    <td>NIC</td>
+  </tr>
+  <tr>
+    <td>CLI</td>
+    <td>eth0</td>
+    <td>10.0.1.100/24</td>
+    <td>2001:11::100/64</td>
+    <td>ISP-CLI</td>
+  </tr>
+  <tr>
+    <td rowspan="4">ISP</td>
+    <td>eth0</td>
+    <td>DHCP</td>
+    <td>-</td>
+    <td>INTERNET</td>
+  </tr>
+  <tr>
+    <td>eth1</td>
+    <td>10.0.1.1/24</td>
+    <td>2001:11::1/64</td>
+    <td>ISP-CLI</td>
+  </tr>
+  <tr>
+    <td>eth2</td>
+    <td>10.0.2.1/24</td>
+    <td>2001:22::1/64</td>
+    <td>ISP-HQ</td>
+  </tr>
+  <tr>
+    <td>eth3</td>
+    <td>10.0.3.1/24</td>
+    <td>2001:33::1/64</td>
+    <td>ISP-BR</td>
+  </tr>
+  <tr>
+    <td rowspan="3">HQ-R</td>
+    <td>eth0</td>
+    <td>10.0.2.100/24</td>
+    <td>2001:22::100/64</td>
+    <td>ISP-HQ</td>
+  </tr>
+  <tr>
+    <td>eth1</td>
+    <td>192.168.200.2/26</td>
+    <td>2000:100::2/122</td>
+    <td>HQ-SRV</td>
+  </tr>
+  <tr>
+    <td>wg0</td>
+    <td>10.0.0.1/24</td>
+    <td>2001:100::1/64, fe80::200:ff:fe00:1/64</td>
+    <td>TUNNEL</td>
+  </tr>
+  <tr>
+    <td>HQ-SRV</td>
+    <td>eth0</td>
+    <td>10.0.2.100/24</td>
+    <td>2001:22::100/64</td>
+    <td>HQ-R</td>
+   </tr>
+  <tr>
+    <td rowspan="3">BR-R</td>
+    <td>eth0</td>
+    <td>10.0.3.100/24</td>
+    <td>2001:33::100/64</td>
+    <td>ISP-BR</td>
+  </tr>
+ <tr>
+    <td>eth1</td>
+    <td>172.16.200.2/28</td>
+    <td>2000:200::2/124</td>
+    <td>BR-SRV</td>
+  </tr>
+  <tr>
+    <td>wg0</td>
+    <td>10.0.0.2/24</td>
+    <td>2001:100::2/64, fe80::200:ff:fe00:2/64</td>
+    <td>TUNNEL</td>
+  </tr>
+   <tr>
+    <td>BR-SRV</td>
+    <td>eth0</td>
+    <td>172.16.200.1/28</td>
+    <td>2000:200::1/124</td>
+    <td>BR-R</td>
+   </tr>
+</table>
 
 ## CLI
 ```sh
