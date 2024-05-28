@@ -36,7 +36,7 @@ hostnamectl set-hostname isp;exec bash
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
 ```
 ```sh
-sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
 mkdir /etc/net/ifaces/eth{0..3}
 cat <<EOF > /etc/net/ifaces/eth0/options
 TYPE=eth
@@ -96,7 +96,7 @@ chmod +x /etc/scripts/backup-script.sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
 ```
 ```sh
-sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
 mkdir /etc/net/ifaces/eth{0..1}
 cat <<EOF > /etc/net/ifaces/eth0/options
 TYPE=eth
@@ -173,6 +173,26 @@ allow all
 EOF
 systemctl enable --now chronyd
 systemctl restart chronyd
+```
+```sh
+apt-get install dhcp-server -y
+sed -i 's/DHCPDARGS=.*/DHCPDARGS=eth1/g' /etc/sysconfig/dhcpd
+cat <<EOF > /etc/dhcp/dhcpd.conf
+default-lease-time 6000;
+max-lease-time 72000;
+authoritative;
+subnet 192.168.200.0 netmask 255.255.255.192 {
+  range 192.168.200.3 192.168.200.62;
+  option domain-name-servers 192.168.200.1;
+  option routers 192.168.200.2;
+}
+host hq-srv {
+  hardware ethernet 00:50:00:00:03:00;
+  fixed-address 192.168.200.1;
+}
+EOF
+systemctl enable --now dhcpd
+systemctl restart dhcpd
 ```
 ## BR-R
 ```sh
@@ -271,3 +291,4 @@ echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
 ```
+
