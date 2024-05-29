@@ -570,8 +570,8 @@ docker-compose -f /home/user/wiki.yaml up -d
 hostnamectl set-hostname br-srv.branch.work;exec bash
 ```
 ```sh
-useradd network_admin && echo P@ssw0rd | passwd admin --stdin
-useradd branch_admin && echo P@ssw0rd | passwd admin --stdin
+useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
+useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
