@@ -122,7 +122,10 @@ echo 10.0.1.100/24 > /etc/net/ifaces/eth0/ipv4address
 echo 2001:11::100/64 > /etc/net/ifaces/eth0/ipv6address
 echo default via 10.0.1.1 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2001:11::1 > /etc/net/ifaces/eth0/ipv6route
-echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
+cat <<EOF > /etc/net/ifaces/eth0/resolv.conf
+nameserver 192.168.200.1
+nameserver 192.168.100.1
+EOF
 systemctl restart network
 ```
 ## ISP
@@ -206,7 +209,10 @@ echo default via 10.0.2.1 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2001:22::1 > /etc/net/ifaces/eth0/ipv6route
 echo 192.168.200.2/26 > /etc/net/ifaces/eth1/ipv4address
 echo 2000:100::2/122 > /etc/net/ifaces/eth1/ipv6address
-echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
+cat <<EOF > /etc/net/ifaces/eth0/resolv.conf
+nameserver 192.168.200.1
+nameserver 192.168.100.1
+EOF
 systemctl restart network
 ```
 ```sh
@@ -333,7 +339,10 @@ echo default via 10.0.3.1 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2001:33::1 > /etc/net/ifaces/eth0/ipv6route
 echo 172.16.200.2/28 > /etc/net/ifaces/eth1/ipv4address
 echo 2000:200::2/124 > /etc/net/ifaces/eth1/ipv6address
-echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
+cat <<EOF > /etc/net/ifaces/eth0/resolv.conf
+nameserver 192.168.200.1
+nameserver 192.168.100.1
+EOF
 systemctl restart network
 ```
 <!---
@@ -412,7 +421,10 @@ echo 2000:100::1/122 > /etc/net/ifaces/eth0/ipv6address
 echo default via 192.168.200.2 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2000:100::2 > /etc/net/ifaces/eth0/ipv6route
 echo address aa:bb:cc:dd:ee:ff > /etc/net/ifaces/eth0/iplink
-echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
+cat <<EOF > /etc/net/ifaces/eth0/resolv.conf
+nameserver 192.168.200.1
+nameserver 192.168.100.1
+EOF
 systemctl restart network
 ```
 ```sh
@@ -572,7 +584,10 @@ echo 172.16.200.1/28 > /etc/net/ifaces/eth0/ipv4address
 echo 2000:200::1/124 > /etc/net/ifaces/eth0/ipv6address
 echo default via 172.16.200.2 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2000:200::2 > /etc/net/ifaces/eth0/ipv6route
-echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
+cat <<EOF > /etc/net/ifaces/eth0/resolv.conf
+nameserver 192.168.200.1
+nameserver 192.168.100.1
+EOF
 systemctl restart network
 ```
 ```sh
