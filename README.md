@@ -656,7 +656,7 @@ useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
 ```
 ```sh
 mdadm --create --verbose /dev/md0 -l 5 -n 4 /dev/vdb /dev/vdc /dev/vdd /dev/vde
-mdadm --detail --scan --verbose >> /etc/mdadm.conf
+mdadm --detail --scan --verbose > /etc/mdadm.conf
 mkfs.ext4 /dev/md0
 mkdir /mnt/storage
 mount /dev/md0 /mnt/storage
