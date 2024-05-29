@@ -109,6 +109,7 @@ hostnamectl set-hostname cli;exec bash
 useradd admin && echo P@ssw0rd | passwd admin --stdin
 ```
 ```sh
+mkdir /etc/net/ifaces/eth0
 cat <<EOF > /etc/net/ifaces/eth0/options
 TYPE=eth
 DISABLED=no
@@ -318,7 +319,7 @@ chmod +x /etc/scripts/backup-script.sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
 ```
 ```sh
-sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
 mkdir /etc/net/ifaces/eth{0..1}
 cat <<EOF > /etc/net/ifaces/eth0/options
 TYPE=eth
@@ -399,7 +400,7 @@ hostnamectl set-hostname hq-srv.hq.work;exec bash
 useradd admin && echo P@ssw0rd | passwd admin --stdin
 ```
 ```sh
-sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
 mkdir /etc/net/ifaces/eth0
 cat <<EOF > /etc/net/ifaces/eth0/options
 TYPE=eth
@@ -423,7 +424,7 @@ systemctl restart chronyd
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-echo '0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
+echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
 ```
 ```sh
 apt-get install bind -y
@@ -439,7 +440,7 @@ $TTL 1D
 @ IN SOA hq-srv.branch.work. root.branch.work. ( 1; 12H; 1H; 1W; 1H; )
  IN NS hq-srv.hq.work.
 hq-srv IN A 172.16.200.1
-br-srv	IN	A	172.16.200.1
+br-srv IN A 172.16.200.1
 br-r IN A 172.16.200.2
 EOF
 cat <<EOF > /etc/bind/zone/domain.work
@@ -448,6 +449,49 @@ $TTL 1D
  IN NS hq-srv.domain.work.
 hq-srv IN A 192.168.200.1
 EOF
+cat <<EOF > /etc/bind/zone/hq.192
+$TTL 1D
+@ IN SOA hq-srv.hq.work. root.hq.work. ( 1; 12H; 1H; 1W; 1H; )
+@ IN NS hq-srv.hq.work.
+1 IN PTR hq-srv
+2 IN PTR hq-r
+EOF
+cat <<EOF > /etc/bind/zone/branch.172
+$TTL 1D
+@ IN SOA hq-srv.hq.work. root.hq.work. ( 1; 12H; 1H; 1W; 1H; )
+@ IN NS hq-srv.branch.work.
+1 IN PTR br-srv
+2 IN PTR br-r
+EOF
+cat <<EOF > /etc/bind/local.conf
+zone "hq.work" {
+type master;
+file "/etc/bind/zone/hq.work";
+};
+zone "branch.work" {
+type master;
+file "/etc/bind/zone/branch.work";
+};
+zone "domain.work" {
+type master;
+file "/etc/bind/zone/domain.work";
+};
+zone "200.168.192.in-addr.arpa" {
+type master;
+file "/etc/bind/zone/hq.192";
+};
+zone "200.16.172.in-addr.arpa" {
+type master;
+file "/etc/bind/zone/branch.172";
+};
+EOF
+sed -i 's/127.0.0.1/any/g' /etc/bind/options.conf
+sed -i 's/::1/any/g' /etc/bind/options.conf
+sed -i 's/\/\/forwarders .*/forwarders { 192.168.100.1; };/g' /etc/bind/options.conf
+sed -i 's/::1/any/g' /etc/bind/options.conf
+sed -i 's/\/\/allow-query .*/allow-query { any; };/g' /etc/bind/options.conf
+sed -i 's/\/\/allow-query-cache .*/allow-query-cache { any; };/g' /etc/bind/options.conf
+
 ```
 ```sh
 apt-get install docker-engine docker-compose -y
@@ -484,7 +528,7 @@ useradd network_admin && echo P@ssw0rd | passwd admin --stdin
 useradd branch_admin && echo P@ssw0rd | passwd admin --stdin
 ```
 ```sh
-sed -i 's/CONFIG_IPV6=/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
+sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
 mkdir /etc/net/ifaces/eth0
 cat <<EOF > /etc/net/ifaces/eth0/options
 TYPE=eth
@@ -507,7 +551,7 @@ systemctl restart chronyd
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-echo '0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
+echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
 ```
 ```sh
 apt-get install MySQL-server moodle moodle-apache2 moodle-local-mysql -y
