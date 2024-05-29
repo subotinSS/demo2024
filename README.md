@@ -472,7 +472,7 @@ systemctl restart chronyd
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
+echo '0 0 * * * clamscan -ir /  > /root/clamav-scan.log' >> /var/spool/cron/root
 
 ```
 ```sh
@@ -642,7 +642,7 @@ systemctl restart chronyd
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
+echo '0 0 * * * clamscan -ir /  > /root/clamav-scan.log' >> /var/spool/cron/root
 
 ```
 ```sh
