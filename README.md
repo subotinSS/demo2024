@@ -208,6 +208,7 @@ echo nameserver 192.168.100.1 > /etc/net/ifaces/eth1/resolv.conf
 systemctl restart network
 ```
 ```sh
+apt-get update
 apt-get install iperf3 -y
 iperf3 -c 10.0.2.1 --get-server-output
 ```
@@ -341,6 +342,7 @@ PrivateKeyClient = 0NoAhQRWFxULuptD5tiqyhZcZIdNi66IGxPOu25LWlw=
 PublicKeyClient = n50LXW13DNK8goptE84NyLJ2OIVlwVr2tVlezgtgAHw=
 -->
 ```sh
+apt-get update
 apt-get install wireguard-tools wireguard-tools-wg-quick -y
 mkdir /etc/wireguard
 cat <<EOF > /etc/wireguard/wg0.conf
@@ -412,6 +414,7 @@ systemctl restart network
 echo nameserver 192.168.100.1 > /etc/resolv.conf
 ```
 ```sh
+apt-get update
 apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
@@ -471,6 +474,7 @@ systemctl restart network
 echo nameserver 192.168.100.1 > /etc/resolv.conf
 ```
 ```sh
+apt-get update
 apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
@@ -484,12 +488,12 @@ echo '0       0       *       *       *       clamscan -ir /  >> /root/clamav-sc
 ```sh
 apt-get install MySQL-server moodle moodle-apache2 moodle-local-mysql -y
 systemctl enable --now mysqld httpd2
-mysql -u root
+PASSWORD="" mysql -uroot <<EOF
 CREATE DATABASE moodle DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'moodleuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'moodlepasswd';
 GRANT ALL PRIVILEGES ON moodle.* TO 'moodleuser'@'localhost';
 FLUSH PRIVILEGES;
-exit
+EOF
 ```
 
 
