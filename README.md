@@ -201,7 +201,7 @@ systemctl enable --now iperf3
 ```
 ## HQ-R
 ```sh
-hostnamectl set-hostname hq-r.hq.work;exec bash
+hostnamectl set-hostname hq-r.domain.work;exec bash
 
 ```
 ```sh
@@ -368,7 +368,7 @@ systemctl enable --now iptables
 ```
 ## BR-R
 ```sh
-hostnamectl set-hostname br-r.branch.work;exec bash
+hostnamectl set-hostname br-r.domain.work;exec bash
 
 ```
 ```sh
