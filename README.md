@@ -352,6 +352,7 @@ Table = off
 PublicKey = 5ewEdGg2jcsE5Pht2O1X06RsvBwufxdev8SLgvJGKks=
 Endpoint = 10.0.2.100:1234
 PersistentKeepalive = 10
+AllowedIPs = 0.0.0.0/0, ::/0
 EOF
 systemctl restart wg-quick@wg0
 systemctl enable wg-quick@wg0
@@ -419,10 +420,7 @@ systemctl restart chronyd
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-cat <<EOF > /etc/cron.d/clamav-scan
-# RUN system scanning at midnight
-0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log
-EOF
+echo '0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
 ```
 ```sh
 apt-get install docker-engine docker-compose -y
@@ -479,12 +477,21 @@ systemctl enable --now chronyd
 systemctl restart chronyd
 ```
 ```sh
+```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-cat <<EOF > /etc/cron.d/clamav-scan
-# RUN system scanning at midnight
-0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log
-EOF
+echo '0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
+```
+```
+```sh
+apt-get install MySQL-server moodle moodle-apache2 moodle-local-mysql -y
+systemctl enable --now mysqld httpd2
+mysql -u root
+CREATE DATABASE moodle DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'moodleuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'moodlepasswd';
+GRANT ALL PRIVILEGES ON moodle.* TO 'moodleuser'@'localhost';
+FLUSH PRIVILEGES;
+exit
 ```
 
 
