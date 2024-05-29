@@ -104,6 +104,7 @@
 ## CLI
 ```sh
 hostnamectl set-hostname cli;exec bash
+
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
