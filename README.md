@@ -430,14 +430,14 @@ echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-s
 ```sh
 apt-get install bind -y
 cat <<EOF > /etc/bind/zone/hq.work
-$TTL 1D
+\$TTL 1D
 @ IN SOA hq-srv.hq.work. root.hq.work. ( 1; 12H; 1H; 1W; 1H; )
  IN NS hq-srv.hq.work.
 hq-srv IN A 192.168.200.1
 hq-r IN A 192.168.200.2
 EOF
 cat <<EOF > /etc/bind/zone/branch.work
-$TTL 1D
+\$TTL 1D
 @ IN SOA hq-srv.branch.work. root.branch.work. ( 1; 12H; 1H; 1W; 1H; )
  IN NS hq-srv.hq.work.
 hq-srv IN A 172.16.200.1
@@ -445,20 +445,20 @@ br-srv IN A 172.16.200.1
 br-r IN A 172.16.200.2
 EOF
 cat <<EOF > /etc/bind/zone/domain.work
-$TTL 1D
+\$TTL 1D
 @ IN SOA hq-srv.domain.work. root.domain.work. ( 1; 12H; 1H; 1W; 1H; )
  IN NS hq-srv.domain.work.
 hq-srv IN A 192.168.200.1
 EOF
 cat <<EOF > /etc/bind/zone/hq.192
-$TTL 1D
+\$TTL 1D
 @ IN SOA hq-srv.hq.work. root.hq.work. ( 1; 12H; 1H; 1W; 1H; )
 @ IN NS hq-srv.hq.work.
 1 IN PTR hq-srv
 2 IN PTR hq-r
 EOF
 cat <<EOF > /etc/bind/zone/branch.172
-$TTL 1D
+\$TTL 1D
 @ IN SOA hq-srv.hq.work. root.hq.work. ( 1; 12H; 1H; 1W; 1H; )
 @ IN NS hq-srv.branch.work.
 1 IN PTR br-srv
