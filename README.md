@@ -322,6 +322,22 @@ systemctl enable --now dhcpd
 systemctl restart dhcpd
 
 ```
+```sh
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -A INPUT -i eth0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 53 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 1234 -j ACCEPT 
+iptables -A INPUT -i eth0 -p icmp -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 4444 -j ACCEPT
+iptables-save > /etc/sysconfig/iptables
+systemctl enable --now iptables
+
+```
 ## BR-R
 ```sh
 hostnamectl set-hostname br-r.branch.work;exec bash
@@ -433,6 +449,22 @@ systemctl enable --now chronyd
 systemctl restart chronyd
 
 ```
+```sh
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -A INPUT -i eth0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 53 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --dport 1234 -j ACCEPT 
+iptables -A INPUT -i eth0 -p icmp -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 4444 -j ACCEPT
+iptables-save > /etc/sysconfig/iptables
+systemctl enable --now iptables
+
+```
 ## HQ-SRV
 ```sh
 hostnamectl set-hostname hq-srv.hq.work;exec bash
@@ -472,7 +504,7 @@ systemctl restart chronyd
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-echo '0 0 * * * clamscan -ir /  > /root/clamav-scan.log' >> /var/spool/cron/root
+echo '0 0 * * * clamscan -ir / >> /root/clamav-scan.log' >> /var/spool/cron/root
 
 ```
 ```sh
@@ -642,7 +674,7 @@ systemctl restart chronyd
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
-echo '0 0 * * * clamscan -ir /  > /root/clamav-scan.log' >> /var/spool/cron/root
+echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' >> /var/spool/cron/root
 
 ```
 ```sh
