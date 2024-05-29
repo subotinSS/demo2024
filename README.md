@@ -105,9 +105,12 @@
 ```sh
 hostnamectl set-hostname cli;exec bash
 
+
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
+
+
 ```
 ```sh
 mkdir /etc/net/ifaces/eth0
@@ -128,13 +131,19 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
+
+
 ```
 ## ISP
 ```sh
 hostnamectl set-hostname isp;exec bash
+
+
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
+
+
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -160,23 +169,28 @@ echo 2001:33::1/64 > /etc/net/ifaces/eth3/ipv6address
 echo 172.16.200.0/28 via 10.0.3.100 > /etc/net/ifaces/eth3/ipv4route
 echo 2000:200::/124 via 2001:33::100 > /etc/net/ifaces/eth3/ipv6route
 systemctl restart network
+
 ```
 ```sh
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 iptables-save >> /etc/sysconfig/iptables
 systemctl enable --now iptables
+
 ```
 ```sh
 apt-get install iperf3 -y
 systemctl enable --now iperf3
+
 ```
 ## HQ-R
 ```sh
 hostnamectl set-hostname hq-r.hq.work;exec bash
+
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
+
 ```
 ```sh
 mkdir /opt/backup
@@ -192,9 +206,11 @@ tar czf \$dest/\$archive_file \$backup_files
 EOF
 chmod +x /etc/scripts/backup-script.sh
 /etc/scripts/backup-script.sh
+
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
+
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -215,11 +231,13 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
+
 ```
 ```sh
 apt-get update
 apt-get install iperf3 -y
 iperf3 -c 10.0.2.1 --get-server-output
+
 ```
 <!---
 Wireguard keys
@@ -243,6 +261,7 @@ AllowedIPs = 0.0.0.0/0, ::/0
 EOF
 systemctl restart wg-quick@wg0
 systemctl enable wg-quick@wg0
+
 ```
 ```sh
 apt-get install frr -y
@@ -269,6 +288,7 @@ exit
 EOF
 systemctl enable --now frr
 systemctl restart frr
+
 ```
 ```sh
 apt-get install chrony -y
@@ -279,6 +299,7 @@ allow all
 EOF
 systemctl enable --now chronyd
 systemctl restart chronyd
+
 ```
 ```sh
 apt-get install dhcp-server -y
@@ -299,14 +320,17 @@ host hq-srv {
 EOF
 systemctl enable --now dhcpd
 systemctl restart dhcpd
+
 ```
 ## BR-R
 ```sh
 hostnamectl set-hostname br-r.branch.work;exec bash
+
 ```
 ```sh
 useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
+
 ```
 ```sh
 mkdir /opt/backup
@@ -322,9 +346,11 @@ tar czf \$dest/\$archive_file \$backup_files
 EOF
 chmod +x /etc/scripts/backup-script.sh
 /etc/scripts/backup-script.sh
+
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
+
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -345,6 +371,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
+
 ```
 <!---
 Wireguard keys
@@ -370,6 +397,7 @@ AllowedIPs = 0.0.0.0/0, ::/0
 EOF
 systemctl restart wg-quick@wg0
 systemctl enable wg-quick@wg0
+
 ```
 ```sh
 apt-get install frr -y
@@ -396,19 +424,23 @@ exit
 EOF
 systemctl enable --now frr
 systemctl restart frr
+
 ```
 ```sh
 apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
+
 ```
 ## HQ-SRV
 ```sh
 hostnamectl set-hostname hq-srv.hq.work;exec bash
+
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
+
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -427,6 +459,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
+
 ```
 ```sh
 apt-get update
@@ -434,11 +467,13 @@ apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
+
 ```
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
 echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
+
 ```
 ```sh
 apt-get install bind -y
@@ -539,6 +574,7 @@ sed -i 's/\/\/interface-interval .*/dnssec-validation no;/g' /etc/bind/options.c
 chmod 777 /etc/bind/zone/ -R
 systemctl enable --now bind
 systemctl restart bind
+
 ```
 ```sh
 apt-get install docker-engine docker-compose -y
@@ -565,14 +601,17 @@ services:
       MYSQL_ROOT_PASSWORD: toor
 EOF
 docker-compose -f /home/user/wiki.yaml up -d
+
 ```
 ## BR-SRV
 ```sh
 hostnamectl set-hostname br-srv.branch.work;exec bash
+
 ```
 ```sh
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
 useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
+
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -590,6 +629,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
+
 ```
 ```sh
 apt-get update
@@ -597,11 +637,13 @@ apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
+
 ```
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
 echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
+
 ```
 ```sh
 apt-get install MySQL-server moodle moodle-apache2 moodle-local-mysql -y
@@ -612,6 +654,9 @@ CREATE USER 'moodleuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'm
 GRANT ALL PRIVILEGES ON moodle.* TO 'moodleuser'@'localhost';
 FLUSH PRIVILEGES;
 EOF
+sed -i 's/; max_input_vars .*/max_input_vars = 5000/g' /etc/php/*/apache2-mod_php/php.ini
+systemctl restart httpd2
+
 ```
 
 
