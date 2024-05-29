@@ -609,6 +609,16 @@ systemctl restart bind
 
 ```
 ```sh
+apt-get install freeipa-server -y
+ipa-server-install -r DOMAIN.WORK -p P@ssw0rd -a P@ssw0rd -N --unattended
+cat /tmp/.private/root/ipa.system.records.*.db >> /etc/bind/zone/domain.work
+systemctl restart bind
+echo P@ssw0rd | kinit admin
+echo P@ssw0rd | ipa user-add branch_admin --first Branch --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/branch_admin --password
+echo P@ssw0rd | ipa user-add network_admin --first Network --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/network_admin --password
+
+```
+```sh
 apt-get install docker-engine docker-compose -y
 systemctl enable --now docker.service
 cat << EOF > /home/user/wiki.yaml
