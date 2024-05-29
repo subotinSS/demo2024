@@ -524,6 +524,7 @@ sed -i 's/\/\/allow-query .*/allow-query { any; };/g' /etc/bind/options.conf
 sed -i 's/\/\/allow-query-cache .*/allow-query-cache { any; };/g' /etc/bind/options.conf
 sed -i 's/\/\/interface-interval .*/dnssec-validation no;/g' /etc/bind/options.conf
 chmod 777 /etc/bind/zone/ -R
+systemctl enable --now bind
 systemctl restart bind
 ```
 ```sh
