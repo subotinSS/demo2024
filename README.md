@@ -103,13 +103,11 @@
 
 ## CLI
 ```sh
-hostnamectl set-hostname cli;exec bash
-
+hostnamectl set-hostname cli.domain.work;exec bash
 
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
-
 
 ```
 ```sh
@@ -467,7 +465,7 @@ systemctl enable --now iptables
 ```
 ## HQ-SRV
 ```sh
-hostnamectl set-hostname hq-srv.hq.work;exec bash
+hostnamectl set-hostname hq-srv.domain.work;exec bash
 
 ```
 ```sh
@@ -614,6 +612,7 @@ ipa-server-install -r DOMAIN.WORK -n DOMAIN.WORK -p P@ssw0rd -a P@ssw0rd -N --un
 cat /tmp/.private/root/ipa.system.records.*.db >> /etc/bind/zone/domain.work
 systemctl restart bind
 echo P@ssw0rd | kinit admin
+ipa user-mod admin --homedir /home/ipa/admin
 echo P@ssw0rd | ipa user-add branch_admin --first Branch --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/branch_admin --password
 echo P@ssw0rd | ipa user-add network_admin --first Network --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/network_admin --password
 
@@ -647,7 +646,7 @@ docker-compose -f /home/user/wiki.yaml up -d
 ```
 ## BR-SRV
 ```sh
-hostnamectl set-hostname br-srv.branch.work;exec bash
+hostnamectl set-hostname br-srv.domain.work;exec bash
 
 ```
 ```sh
