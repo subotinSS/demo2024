@@ -122,6 +122,7 @@ echo 10.0.1.100/24 > /etc/net/ifaces/eth0/ipv4address
 echo 2001:11::100/64 > /etc/net/ifaces/eth0/ipv6address
 echo default via 10.0.1.1 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2001:11::1 > /etc/net/ifaces/eth0/ipv6route
+echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
 systemctl restart network
 ```
 ## ISP
@@ -205,7 +206,7 @@ echo default via 10.0.2.1 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2001:22::1 > /etc/net/ifaces/eth0/ipv6route
 echo 192.168.200.2/26 > /etc/net/ifaces/eth1/ipv4address
 echo 2000:100::2/122 > /etc/net/ifaces/eth1/ipv6address
-echo nameserver 192.168.100.1 > /etc/net/ifaces/eth1/resolv.conf
+echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
 systemctl restart network
 ```
 ```sh
@@ -332,7 +333,7 @@ echo default via 10.0.3.1 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2001:33::1 > /etc/net/ifaces/eth0/ipv6route
 echo 172.16.200.2/28 > /etc/net/ifaces/eth1/ipv4address
 echo 2000:200::2/124 > /etc/net/ifaces/eth1/ipv6address
-echo nameserver 192.168.100.1 > /etc/net/ifaces/eth1/resolv.conf
+echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
 systemctl restart network
 ```
 <!---
@@ -410,9 +411,9 @@ echo 192.168.200.1/26 > /etc/net/ifaces/eth0/ipv4address
 echo 2000:100::1/122 > /etc/net/ifaces/eth0/ipv6address
 echo default via 192.168.200.2 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2000:100::2 > /etc/net/ifaces/eth0/ipv6route
-echo address aa:bb:cc:dd:ee:ff > /etc/net/ifaces/eth0/iplink 
+echo address aa:bb:cc:dd:ee:ff > /etc/net/ifaces/eth0/iplink
+echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
 systemctl restart network
-echo nameserver 192.168.100.1 > /etc/resolv.conf
 ```
 ```sh
 apt-get update
@@ -491,7 +492,9 @@ sed -i 's/\/\/forwarders .*/forwarders { 192.168.100.1; };/g' /etc/bind/options.
 sed -i 's/::1/any/g' /etc/bind/options.conf
 sed -i 's/\/\/allow-query .*/allow-query { any; };/g' /etc/bind/options.conf
 sed -i 's/\/\/allow-query-cache .*/allow-query-cache { any; };/g' /etc/bind/options.conf
-
+sed -i 's/\/\/interface-interval .*/dnssec-validation no;/g' /etc/bind/options.conf
+chmod 777 /etc/bind/zone/ -R
+systemctl restart bind
 ```
 ```sh
 apt-get install docker-engine docker-compose -y
@@ -538,8 +541,8 @@ echo 172.16.200.1/28 > /etc/net/ifaces/eth0/ipv4address
 echo 2000:200::1/124 > /etc/net/ifaces/eth0/ipv6address
 echo default via 172.16.200.2 > /etc/net/ifaces/eth0/ipv4route
 echo default via 2000:200::2 > /etc/net/ifaces/eth0/ipv6route
+echo nameserver 192.168.200.1 192.168.100.1 > /etc/net/ifaces/eth0/resolv.conf
 systemctl restart network
-echo nameserver 192.168.100.1 > /etc/resolv.conf
 ```
 ```sh
 apt-get update
