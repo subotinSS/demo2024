@@ -6,6 +6,8 @@
 - [HQ-SRV](#HQ-SRV)
 - [BR-SRV](#BR-SRV)
 
+[GIST CLONE](https://gist.github.com/subotinSS/abf58ab7b7f0880f46da523cda9b7f69)
+
 # Таблица IP адресов
 <table>
   <tr>
@@ -104,11 +106,11 @@
 ## CLI
 ```sh
 hostnamectl set-hostname cli.domain.work;exec bash
-
+ 
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
-
+ 
 ```
 ```sh
 mkdir /etc/net/ifaces/eth0
@@ -129,7 +131,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
-
+ 
 ```
 ```sh
 echo 'Authorized access only!' > /etc/openssh/banner
@@ -140,16 +142,16 @@ sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
 sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
 sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
 systemctl restart sshd
-
+ 
 ```
 ## ISP
 ```sh
 hostnamectl set-hostname isp;exec bash
-
+ 
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
-
+ 
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -175,7 +177,7 @@ echo 2001:33::1/64 > /etc/net/ifaces/eth3/ipv6address
 echo 172.16.200.0/28 via 10.0.3.100 > /etc/net/ifaces/eth3/ipv4route
 echo 2000:200::/124 via 2001:33::100 > /etc/net/ifaces/eth3/ipv6route
 systemctl restart network
-
+ 
 ```
 ```sh
 echo 'Authorized access only!' > /etc/openssh/banner
@@ -186,28 +188,28 @@ sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
 sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
 sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
 systemctl restart sshd
-
+ 
 ```
 ```sh
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 iptables-save >> /etc/sysconfig/iptables
 systemctl enable --now iptables
-
+ 
 ```
 ```sh
 apt-get install iperf3 -y
 systemctl enable --now iperf3
-
+ 
 ```
 ## HQ-R
 ```sh
 hostnamectl set-hostname hq-r.domain.work;exec bash
-
+ 
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
-
+ 
 ```
 ```sh
 mkdir /opt/backup
@@ -223,11 +225,11 @@ tar czf \$dest/\$archive_file \$backup_files
 EOF
 chmod +x /etc/scripts/backup-script.sh
 /etc/scripts/backup-script.sh
-
+ 
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
-
+ 
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -248,7 +250,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
-
+ 
 ```
 ```sh
 echo 'Authorized access only!' > /etc/openssh/banner
@@ -259,13 +261,13 @@ sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
 sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
 sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
 systemctl restart sshd
-
+ 
 ```
 ```sh
 apt-get update
 apt-get install iperf3 -y
 iperf3 -c 10.0.2.1 --get-server-output
-
+ 
 ```
 <!---
 Wireguard keys
@@ -289,7 +291,7 @@ AllowedIPs = 0.0.0.0/0, ::/0
 EOF
 systemctl restart wg-quick@wg0
 systemctl enable wg-quick@wg0
-
+ 
 ```
 ```sh
 apt-get install frr -y
@@ -316,7 +318,7 @@ exit
 EOF
 systemctl enable --now frr
 systemctl restart frr
-
+ 
 ```
 ```sh
 apt-get install chrony -y
@@ -327,7 +329,7 @@ allow all
 EOF
 systemctl enable --now chronyd
 systemctl restart chronyd
-
+  
 ```
 ```sh
 apt-get install dhcp-server -y
@@ -348,7 +350,7 @@ host hq-srv {
 EOF
 systemctl enable --now dhcpd
 systemctl restart dhcpd
-
+ 
 ```
 ```sh
 iptables -P INPUT ACCEPT
@@ -364,17 +366,17 @@ iptables -A INPUT -i eth0 -p icmp -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --dport 4444 -j ACCEPT
 iptables-save > /etc/sysconfig/iptables
 systemctl enable --now iptables
-
+ 
 ```
 ## BR-R
 ```sh
 hostnamectl set-hostname br-r.domain.work;exec bash
-
+ 
 ```
 ```sh
 useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
-
+ 
 ```
 ```sh
 mkdir /opt/backup
@@ -390,11 +392,11 @@ tar czf \$dest/\$archive_file \$backup_files
 EOF
 chmod +x /etc/scripts/backup-script.sh
 /etc/scripts/backup-script.sh
-
+ 
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
-
+ 
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -415,7 +417,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
-
+ 
 ```
 ```sh
 echo 'Authorized access only!' > /etc/openssh/banner
@@ -426,7 +428,7 @@ sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
 sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
 sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
 systemctl restart sshd
-
+ 
 ```
 <!---
 Wireguard keys
@@ -452,7 +454,7 @@ AllowedIPs = 0.0.0.0/0, ::/0
 EOF
 systemctl restart wg-quick@wg0
 systemctl enable wg-quick@wg0
-
+ 
 ```
 ```sh
 apt-get install frr -y
@@ -479,14 +481,14 @@ exit
 EOF
 systemctl enable --now frr
 systemctl restart frr
-
+ 
 ```
 ```sh
 apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
-
+ 
 ```
 ```sh
 iptables -P INPUT ACCEPT
@@ -502,16 +504,16 @@ iptables -A INPUT -i eth0 -p icmp -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --dport 4444 -j ACCEPT
 iptables-save > /etc/sysconfig/iptables
 systemctl enable --now iptables
-
+ 
 ```
 ## HQ-SRV
 ```sh
 hostnamectl set-hostname hq-srv.domain.work;exec bash
-
+ 
 ```
 ```sh
 useradd admin && echo P@ssw0rd | passwd admin --stdin
-
+ 
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -530,7 +532,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
-
+ 
 ```
 ```sh
 echo 'Authorized access only!' > /etc/openssh/banner
@@ -541,7 +543,7 @@ sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
 sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
 sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
 cat <<EOF >> /etc/openssh/sshd_config
-Match Address 10.0.1.*
+Match Address 10.0.1.100
     PubkeyAuthentication no
     PasswordAuthentication no
 EOF
@@ -549,22 +551,21 @@ systemctl restart sshd
 iptables -t nat -A PREROUTING -p tcp --dport 2222 -j REDIRECT --to-port 4444
 iptables-save >> /etc/sysconfig/iptables
 systemctl enable --now iptables
-
+ 
 ```
-
 ```sh
 apt-get update
 apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
-
+ 
 ```
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
 echo '0 0 * * * clamscan -ir / >> /root/clamav-scan.log' >> /var/spool/cron/root
-
+ 
 ```
 ```sh
 apt-get install bind -y
@@ -665,7 +666,7 @@ sed -i 's/\/\/interface-interval .*/dnssec-validation no;/g' /etc/bind/options.c
 chmod 777 /etc/bind/zone/ -R
 systemctl enable --now bind
 systemctl restart bind
-
+ 
 ```
 ```sh
 apt-get install freeipa-server -y
@@ -676,7 +677,7 @@ echo P@ssw0rd | kinit admin
 ipa user-mod admin --homedir /home/ipa/admin
 echo P@ssw0rd | ipa user-add branch_admin --first Branch --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/branch_admin --password
 echo P@ssw0rd | ipa user-add network_admin --first Network --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/network_admin --password
-
+ 
 ```
 ```sh
 apt-get install docker-engine docker-compose -y
@@ -703,17 +704,17 @@ services:
       MYSQL_ROOT_PASSWORD: toor
 EOF
 docker-compose -f /home/user/wiki.yaml up -d
-
+ 
 ```
 ## BR-SRV
 ```sh
 hostnamectl set-hostname br-srv.domain.work;exec bash
-
+ 
 ```
 ```sh
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
 useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
-
+ 
 ```
 ```sh
 mdadm --create --verbose /dev/md0 -l 5 -n 4 /dev/vdb /dev/vdc /dev/vdd /dev/vde
@@ -724,7 +725,7 @@ mount /dev/md0 /mnt/storage
 partprobe /dev/md0
 echo '/dev/md0 /mnt/storage ext4 defaults 0 0' >> /etc/fstab
 mount -a
-
+ 
 ```
 ```sh
 sed -i 's/CONFIG_IPV6=.*/CONFIG_IPV6=YES/g' /etc/net/ifaces/default/options
@@ -742,7 +743,7 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
-
+ 
 ```
 ```sh
 echo 'Authorized access only!' > /etc/openssh/banner
@@ -753,7 +754,7 @@ sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
 sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
 sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
 systemctl restart sshd
-
+ 
 ```
 ```sh
 apt-get update
@@ -761,13 +762,13 @@ apt-get install chrony -y
 echo server 192.168.200.2 iburst > /etc/chrony.conf
 systemctl enable --now chronyd
 systemctl restart chronyd
-
+ 
 ```
 ```sh
 apt-get install clamav clamav-db -y
 echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /root/infected.txt
 echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' >> /var/spool/cron/root
-
+ 
 ```
 ```sh
 apt-get install MySQL-server moodle moodle-apache2 moodle-local-mysql -y
@@ -780,5 +781,5 @@ FLUSH PRIVILEGES;
 EOF
 sed -i 's/; max_input_vars .*/max_input_vars = 5000/g' /etc/php/*/apache2-mod_php/php.ini
 systemctl restart httpd2
-
+ 
 ```
