@@ -426,6 +426,30 @@ echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' > /r
 echo '0       0       *       *       *       clamscan -ir /  >> /root/clamav-scan.log' > /etc/cron.d/clamav-scan
 ```
 ```sh
+apt-get install bind -y
+cat <<EOF > /etc/bind/zone/hq.work
+$TTL 1D
+@ IN SOA hq-srv.hq.work. root.hq.work. ( 1; 12H; 1H; 1W; 1H; )
+ IN NS hq-srv.hq.work.
+hq-srv IN A 192.168.200.1
+hq-r IN A 192.168.200.2
+EOF
+cat <<EOF > /etc/bind/zone/branch.work
+$TTL 1D
+@ IN SOA hq-srv.branch.work. root.branch.work. ( 1; 12H; 1H; 1W; 1H; )
+ IN NS hq-srv.hq.work.
+hq-srv IN A 172.16.200.1
+br-srv	IN	A	172.16.200.1
+br-r IN A 172.16.200.2
+EOF
+cat <<EOF > /etc/bind/zone/domain.work
+$TTL 1D
+@ IN SOA hq-srv.domain.work. root.domain.work. ( 1; 12H; 1H; 1W; 1H; )
+ IN NS hq-srv.domain.work.
+hq-srv IN A 192.168.200.1
+EOF
+```
+```sh
 apt-get install docker-engine docker-compose -y
 systemctl enable --now docker.service
 cat << EOF > /home/user/wiki.yaml
