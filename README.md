@@ -130,17 +130,25 @@ nameserver 192.168.100.1
 EOF
 systemctl restart network
 
+```
+```sh
+echo 'Authorized access only!' > /etc/openssh/banner
+sed -i 's/#Port.*/Port 4444/g' /etc/openssh/sshd_config
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/openssh/sshd_config
+sed -i 's/#Banner.*/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
+sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
+sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
+sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
+systemctl restart sshd
 
 ```
 ## ISP
 ```sh
 hostnamectl set-hostname isp;exec bash
 
-
 ```
 ```sh
 sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1\nnet.ipv6.conf.all.forwarding = 1/g' /etc/net/sysctl.conf
-
 
 ```
 ```sh
@@ -167,6 +175,17 @@ echo 2001:33::1/64 > /etc/net/ifaces/eth3/ipv6address
 echo 172.16.200.0/28 via 10.0.3.100 > /etc/net/ifaces/eth3/ipv4route
 echo 2000:200::/124 via 2001:33::100 > /etc/net/ifaces/eth3/ipv6route
 systemctl restart network
+
+```
+```sh
+echo 'Authorized access only!' > /etc/openssh/banner
+sed -i 's/#Port.*/Port 4444/g' /etc/openssh/sshd_config
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/openssh/sshd_config
+sed -i 's/#Banner.*/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
+sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
+sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
+sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
+systemctl restart sshd
 
 ```
 ```sh
@@ -229,6 +248,17 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
+
+```
+```sh
+echo 'Authorized access only!' > /etc/openssh/banner
+sed -i 's/#Port.*/Port 4444/g' /etc/openssh/sshd_config
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/openssh/sshd_config
+sed -i 's/#Banner.*/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
+sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
+sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
+sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
+systemctl restart sshd
 
 ```
 ```sh
@@ -387,6 +417,17 @@ EOF
 systemctl restart network
 
 ```
+```sh
+echo 'Authorized access only!' > /etc/openssh/banner
+sed -i 's/#Port.*/Port 4444/g' /etc/openssh/sshd_config
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/openssh/sshd_config
+sed -i 's/#Banner.*/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
+sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
+sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
+sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
+systemctl restart sshd
+
+```
 <!---
 Wireguard keys
 PrivateKeyServer = EC8jPEudJhau5nBa6CB2OPQxH6GHqvRYNUw6M11kNV4=
@@ -491,6 +532,26 @@ EOF
 systemctl restart network
 
 ```
+```sh
+echo 'Authorized access only!' > /etc/openssh/banner
+sed -i 's/#Port.*/Port 4444/g' /etc/openssh/sshd_config
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/openssh/sshd_config
+sed -i 's/#Banner.*/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
+sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
+sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
+sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
+cat <<EOF >> /etc/openssh/sshd_config
+Match Address 10.0.1.*
+    PubkeyAuthentication no
+    PasswordAuthentication no
+EOF
+systemctl restart sshd
+iptables -t nat -A PREROUTING -p tcp --dport 2222 -j REDIRECT --to-port 4444
+iptables-save >> /etc/sysconfig/iptables
+systemctl enable --now iptables
+
+```
+
 ```sh
 apt-get update
 apt-get install chrony -y
@@ -681,6 +742,17 @@ nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
 systemctl restart network
+
+```
+```sh
+echo 'Authorized access only!' > /etc/openssh/banner
+sed -i 's/#Port.*/Port 4444/g' /etc/openssh/sshd_config
+sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/openssh/sshd_config
+sed -i 's/#Banner.*/Banner \/etc\/openssh\/banner/g' /etc/openssh/sshd_config
+sed -i 's/#MaxAuthTries.*/MaxAuthTries 4/g' /etc/openssh/sshd_config
+sed -i 's/#PermitEmptyPasswords.*/PermitEmptyPasswords no/g' /etc/openssh/sshd_config
+sed -i 's/#LoginGraceTime.*/LoginGraceTime 5m/g' /etc/openssh/sshd_config
+systemctl restart sshd
 
 ```
 ```sh
