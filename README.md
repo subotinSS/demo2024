@@ -782,6 +782,3 @@ sed -i 's/; max_input_vars .*/max_input_vars = 5000/g' /etc/php/*/apache2-mod_ph
 systemctl restart httpd2
 
 ```
-
-
-
