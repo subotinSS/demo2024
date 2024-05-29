@@ -610,7 +610,7 @@ systemctl restart bind
 ```
 ```sh
 apt-get install freeipa-server -y
-ipa-server-install -r DOMAIN.WORK -p P@ssw0rd -a P@ssw0rd -N --unattended
+ipa-server-install -r DOMAIN.WORK -n DOMAIN.WORK -p P@ssw0rd -a P@ssw0rd -N --unattended
 cat /tmp/.private/root/ipa.system.records.*.db >> /etc/bind/zone/domain.work
 systemctl restart bind
 echo P@ssw0rd | kinit admin
@@ -653,6 +653,17 @@ hostnamectl set-hostname br-srv.branch.work;exec bash
 ```sh
 useradd network_admin && echo P@ssw0rd | passwd network_admin --stdin
 useradd branch_admin && echo P@ssw0rd | passwd branch_admin --stdin
+
+```
+```sh
+mdadm --create --verbose /dev/md0 -l 5 -n 4 /dev/vdb /dev/vdc /dev/vdd /dev/vde
+mdadm --detail --scan --verbose >> /etc/mdadm.conf
+mkfs.ext4 /dev/md0
+mkdir /mnt/storage
+mount /dev/md0 /mnt/storage
+partprobe /dev/md0
+echo '/dev/md0 /mnt/storage ext4 defaults 0 0' >> /etc/fstab
+mount -a
 
 ```
 ```sh
