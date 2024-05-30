@@ -683,6 +683,7 @@ echo P@ssw0rd | ipa user-add network_admin --first Network --last Admin --passwo
 ```
 ```sh
 apt-get install docker-engine docker-compose -y
+sed -i 's/^{$/{\n\t"registry-mirrors":["https:\/\/mirror.gcr.io"],/g' /etc/docker/daemon.json
 systemctl enable --now docker.service
 cat << EOF > /home/user/wiki.yaml
 version: '3'
