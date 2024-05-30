@@ -775,8 +775,10 @@ echo '0 0 * * * clamscan -ir /  >> /root/clamav-scan.log' >> /var/spool/cron/roo
  
 ```
 ```sh
-apt-get install MySQL-server moodle moodle-apache2 moodle-local-mysql -y
-systemctl enable --now mysqld httpd2
+apt-get install MySQL-server -y
+systemctl enable --now mysqld
+apt-get install moodle moodle-apache2 moodle-local-mysql -y
+systemctl enable --now httpd2
 PASSWORD="" mysql -uroot <<EOF
 CREATE DATABASE moodle DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'moodleuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'moodlepasswd';
