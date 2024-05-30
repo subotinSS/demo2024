@@ -103,6 +103,10 @@
    </tr>
 </table>
 
+> Скопировать - нажмите левой кнопкой на блок с кодом
+> 
+> Вставить - сочетание клавишь shift + insert
+
 ## CLI
 ```sh
 hostnamectl set-hostname cli.domain.work;exec bash
