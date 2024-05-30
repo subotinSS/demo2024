@@ -6,8 +6,6 @@
 - [HQ-SRV](#HQ-SRV)
 - [BR-SRV](#BR-SRV)
 
-[GIST CLONE](https://gist.github.com/subotinSS/abf58ab7b7f0880f46da523cda9b7f69)
-
 # Таблица IP адресов
 <table>
   <tr>
