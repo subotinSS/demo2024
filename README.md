@@ -355,22 +355,6 @@ systemctl enable --now dhcpd
 systemctl restart dhcpd
  
 ```
-```sh
-iptables -P INPUT ACCEPT
-iptables -P FORWARD ACCEPT
-iptables -P OUTPUT ACCEPT
-iptables -A INPUT -i eth0 -m state --state ESTABLISHED,RELATED -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --dport 53 -j ACCEPT
-iptables -A INPUT -i eth0 -p udp --dport 53 -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --dport 443 -j ACCEPT
-iptables -A INPUT -i eth0 -p udp --dport 1234 -j ACCEPT 
-iptables -A INPUT -i eth0 -p icmp -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --dport 4444 -j ACCEPT
-iptables-save > /etc/sysconfig/iptables
-systemctl enable --now iptables
- 
-```
 ## BR-R
 ```sh
 hostnamectl set-hostname br-r.domain.work;exec bash
@@ -671,17 +655,7 @@ systemctl enable --now bind
 systemctl restart bind
  
 ```
-```sh
-apt-get install freeipa-server -y
-ipa-server-install -r DOMAIN.WORK -n DOMAIN.WORK -p P@ssw0rd -a P@ssw0rd -N --unattended
-cat /tmp/.private/root/ipa.system.records.*.db >> /etc/bind/zone/domain.work
-systemctl restart bind
-echo P@ssw0rd | kinit admin
-ipa user-mod admin --homedir /home/ipa/admin
-echo P@ssw0rd | ipa user-add branch_admin --first Branch --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/branch_admin --password
-echo P@ssw0rd | ipa user-add network_admin --first Network --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/network_admin --password
- 
-```
+
 ```sh
 apt-get install docker-engine docker-compose -y
 sed -i 's/^{$/{\n\t"registry-mirrors":["https:\/\/mirror.gcr.io"],/g' /etc/docker/daemon.json
@@ -696,7 +670,8 @@ services:
     ports:
       - 8080:80
     volumes:
-      - ./LocalSettings.php:/var/www/html/LocalSettings.php
+      - images:/var/www/html/images
+      #- ./LocalSettings.php:/var/www/html/LocalSettings.php
     links:
       - db
   db:
@@ -708,8 +683,24 @@ services:
       MYSQL_USER: wiki
       MYSQL_PASSWORD: DEP@ssw0rd
       MYSQL_ROOT_PASSWORD: toor
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+  images:
+  db:
 EOF
 docker-compose -f /home/user/wiki.yaml up -d
+ 
+```
+```sh
+apt-get install freeipa-server -y
+ipa-server-install -r DOMAIN.WORK -n DOMAIN.WORK -p P@ssw0rd -a P@ssw0rd -N --unattended
+cat /tmp/.private/root/ipa.system.records.*.db >> /etc/bind/zone/domain.work
+systemctl restart bind
+echo P@ssw0rd | kinit admin
+ipa user-mod admin --homedir /home/ipa/admin
+echo P@ssw0rd | ipa user-add branch_admin --first Branch --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/branch_admin --password
+echo P@ssw0rd | ipa user-add network_admin --first Network --last Admin --password-expiration="20250101000000Z" --homedir /home/ipa/network_admin --password
  
 ```
 ## BR-SRV
