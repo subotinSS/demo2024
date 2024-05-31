@@ -132,6 +132,7 @@ cat <<EOF > /etc/net/ifaces/eth0/resolv.conf
 nameserver 192.168.200.1
 nameserver 192.168.100.1
 EOF
+systemctl disable --now NetworkManager
 systemctl restart network
  
 ```
@@ -700,6 +701,7 @@ services:
       - db
   db:
     image: mysql
+    restart: always
     container_name: db
     environment:
       MYSQL_DATABASE: mediawiki
