@@ -666,7 +666,7 @@ version: '3'
 services:
   wiki:
     image: mediawiki
-    restart: always
+    restart: unless-stopped
     ports:
       - 8080:80
     volumes:
@@ -676,7 +676,7 @@ services:
       - db
   db:
     image: mysql
-    restart: always
+    restart: unless-stopped
     container_name: db
     environment:
       MYSQL_DATABASE: mediawiki
@@ -782,3 +782,8 @@ sed -i 's/; max_input_vars .*/max_input_vars = 5000/g' /etc/php/*/apache2-mod_ph
 systemctl restart httpd2
  
 ```
+
+> Что ещё можно сделать?
+> * Для MOODLE пройти мастер настройки через веб интерфейс и создать пользователей
+> * Для MEDIAWIKI пройти мастер настройки и заполнить файл LocalSettings.php
+> * Ввеси машины CLI и SRV-BR в домен
